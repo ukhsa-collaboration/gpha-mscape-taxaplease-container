@@ -1,6 +1,6 @@
-import pytest
+import pytest  # type: ignore # noqa: F401
 
-from taxaplease import TaxaPlease
+from taxaplease import TaxaPlease  # type: ignore
 
 
 def test_root_returns_itself_as_parent():
