@@ -1,14 +1,13 @@
 import functools
-import os
 import sqlite3
 import tempfile
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urljoin
 
-import networkx as nx
-import requests
-from bs4 import BeautifulSoup as bs
+import networkx as nx  # type: ignore
+import requests  # type: ignore
+from bs4 import BeautifulSoup as bs  # type: ignore
 
 import taxaplease_data as tpData
 
