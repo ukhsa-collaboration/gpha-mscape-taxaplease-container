@@ -1,5 +1,3 @@
-import pytest  # type: ignore # noqa: F401
-
 from taxaplease import TaxaPlease  # type: ignore
 
 
