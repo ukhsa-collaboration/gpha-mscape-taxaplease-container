@@ -1,15 +1,16 @@
+import functools
 import os
-import requests
 import sqlite3
 import tempfile
-import functools
-import networkx as nx
-import taxaplease_data as tpData
-from typing import Optional
 from pathlib import Path
-from bs4 import BeautifulSoup as bs
+from typing import Optional
 from urllib.parse import urljoin
 
+import networkx as nx
+import requests
+from bs4 import BeautifulSoup as bs
+
+import taxaplease_data as tpData
 
 __version__ = "1.1.0"
 
@@ -27,15 +28,15 @@ class TaxaPlease:
         self.viral_realms = tpData.VIRAL_REALMS
 
     def _init_database_connection(self):
-        db_dir = os.path.join(Path.home(), ".taxaplease")
-        db_path = os.path.join(db_dir, "taxa.db")
+        db_dir = Path(Path.home(), ".taxaplease")
+        db_path = Path(db_dir, "taxa.db")
 
         ## if the folder doesn't exist, create it
-        if not os.path.isdir(db_dir):
-            os.mkdir(db_dir)
+        if not Path.isdir(db_dir):
+            Path.mkdir(db_dir)
 
         ## if the database doesn't exist, create it
-        if not os.path.isfile(db_path):
+        if not Path.isfile(db_path):
             self._create_database()
 
         return sqlite3.connect(db_path)
@@ -90,9 +91,7 @@ class TaxaPlease:
             )
         )
 
-        absolute_url_list = [
-            urljoin(url, os.path.basename(x)) for x in relative_url_list
-        ]
+        absolute_url_list = [urljoin(url, Path.name(x)) for x in relative_url_list]
 
         return absolute_url_list
 
@@ -139,9 +138,7 @@ class TaxaPlease:
             Parent NCBI taxid or None
         """
         cur = self.con.cursor()
-        res = cur.execute(
-            "SELECT parent_taxid FROM taxa WHERE taxid = ?", [inputTaxid]
-        ).fetchone()
+        res = cur.execute("SELECT parent_taxid FROM taxa WHERE taxid = ?", [inputTaxid]).fetchone()
 
         if res:
             return res[0]
@@ -194,9 +191,7 @@ class TaxaPlease:
             return None
 
         cur = self.con.cursor()
-        res = cur.execute(
-            "SELECT * FROM taxa WHERE taxid = ?", [parent_taxid]
-        ).fetchone()
+        res = cur.execute("SELECT * FROM taxa WHERE taxid = ?", [parent_taxid]).fetchone()
 
         if res:
             return dict(zip(self.column_names, res))
@@ -316,9 +311,7 @@ class TaxaPlease:
         ## or end up with nothing
         return self.get_superkingdom_taxid(rec["parent_taxid"])
 
-    def get_all_parent_taxids(
-        self, inputTaxid: int | str, *, includeSelf: bool = False
-    ) -> tuple:
+    def get_all_parent_taxids(self, inputTaxid: int | str, *, includeSelf: bool = False) -> tuple:
         """
         Takes in an NCBI taxid, gets all parent taxids in order of
         most specific to least specific.
@@ -449,9 +442,7 @@ class TaxaPlease:
                 return None
 
         ## do it the other way
-        right_parents = set(
-            self.get_all_parent_taxids(inputTaxidRight, includeSelf=True)
-        )
+        right_parents = set(self.get_all_parent_taxids(inputTaxidRight, includeSelf=True))
 
         tempLeftId = inputTaxidLeft
         right_levels = 0
@@ -578,9 +569,7 @@ class TaxaPlease:
             True if in the deleted table, else False
         """
         cur = self.con.cursor()
-        res = cur.execute(
-            "SELECT * FROM deleted_taxa WHERE taxid = ?", [inputTaxid]
-        ).fetchone()
+        res = cur.execute("SELECT * FROM deleted_taxa WHERE taxid = ?", [inputTaxid]).fetchone()
 
         return bool(res)
 
@@ -693,7 +682,7 @@ class TaxaPlease:
         ## by returning -1, which we will
         ## detect in the CLI
         return -1
-    
+
     def get_baltimore_classification(self, inputTaxid: int | str) -> Optional[str]:
         """
         Takes in a taxid
@@ -719,7 +708,7 @@ class TaxaPlease:
         """
         if not self.isVirus(inputTaxid):
             return None
-        
+
         parents = set(self.get_all_parent_taxids(inputTaxid, includeSelf=True))
         baltimore_keys = set(self.baltimore)
 
