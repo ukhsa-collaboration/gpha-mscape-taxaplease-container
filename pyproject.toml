@@ -1,0 +1,49 @@
+[project]
+name = "taxaPlease"
+dynamic = ["version"]
+authors = [{ name = "Ashley Shalloe", email = "ashley.shalloe@ukhsa.gov.uk" }]
+description = "NCBI taxonomy wrangling"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pandas>=2.2.2", "Requests>=2.32.3", "networkx==3.4.2", "beautifulsoup4>=4.14.2"]
+
+[tool.setuptools.dynamic]
+version = { attr = "taxaplease.__version__" }
+
+[project.optional-dependencies] # Dependencies for developers only - add more if required
+dev = ["ruff>=0.4.10,<0.5", "pytest", "pre-commit"] 
+
+[build-system] # Leave this section
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+taxaplease = "cli:main"
+
+[tool.ruff.lint] # Lint rules to follow - add or delete if required
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # comprehesnions
+    "C4",
+    # pathlib
+    "PTH",
+]
+
+ignore = ["E501"] # Lint rules to ignore - add or remove as required
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.format]
+quote-style = "double"
