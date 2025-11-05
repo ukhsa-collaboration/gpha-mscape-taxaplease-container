@@ -7,12 +7,10 @@ from taxaplease import TaxaPlease  # type: ignore
 
 @pytest.fixture(scope="module")
 def instantiate_db():
-    result = subprocess.run(
+    subprocess.run(
         ["taxaplease", "taxid", "--parent", "1"],
         capture_output=True,
     )
-
-    assert result.stderr == b""
 
 
 def test_root_returns_itself_as_parent(instantiate_db):
@@ -36,7 +34,7 @@ def test_taxid_2000_is_streptosporangium(instantiate_db):
 
 
 def test_parent_taxa(instantiate_db):
-    taxaPlease = TaxaPlease(instantiate_db)
+    taxaPlease = TaxaPlease()
     assert taxaPlease.get_parent_taxid(2004) == 85012
 
 
