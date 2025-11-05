@@ -11,7 +11,7 @@ def instantiate_db():
         capture_output=True,
     )
 
-    assert result.stderr is None
+    assert result.stderr == b""
 
 
 def test_root_returns_itself_as_parent(instantiate_db):
