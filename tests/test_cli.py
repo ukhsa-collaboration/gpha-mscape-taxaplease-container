@@ -8,7 +8,7 @@ def test_root_returns_itself_as_parent():
         capture_output=True,
     )
 
-    assert result.out.strip() == b"1"
+    assert result.stdout.strip() == b"1"
 
 
 def test_root_record_as_expected():
@@ -17,7 +17,7 @@ def test_root_record_as_expected():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == {
+    assert json.loads(result.stdout.decode("utf-8")) == {
         "taxid": 1,
         "name": "root",
         "rank": "no rank",
@@ -31,7 +31,7 @@ def test_taxid_2000_is_streptosporangium():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")).get("name") == "Streptosporangium"
+    assert json.loads(result.stdout.decode("utf-8")).get("name") == "Streptosporangium"
 
 
 def test_parent_taxa():
@@ -40,7 +40,7 @@ def test_parent_taxa():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == 85012
+    assert json.loads(result.stdout.decode("utf-8")) == 85012
 
 
 def test_get_genus_taxid():
@@ -49,7 +49,7 @@ def test_get_genus_taxid():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == 561
+    assert json.loads(result.stdout.decode("utf-8")) == 561
 
 
 def test_common_parent_record_distant_taxa():
@@ -67,7 +67,7 @@ def test_common_parent_record_distant_taxa():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")).get("name") == "Eukaryota"
+    assert json.loads(result.stdout.decode("utf-8")).get("name") == "Eukaryota"
 
 
 def test_common_parent_record_close_taxa():
@@ -80,7 +80,7 @@ def test_common_parent_record_close_taxa():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")).get("name") == "Enterobacteriaceae"
+    assert json.loads(result.stdout.decode("utf-8")).get("name") == "Enterobacteriaceae"
 
 
 def test_levels_between_close_taxa():
@@ -99,7 +99,7 @@ def test_levels_between_close_taxa():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == {
+    assert json.loads(result.stdout.decode("utf-8")) == {
         "left_levels_to_common_parent": 2,
         "right_levels_to_common_parent": 2,
         "total_levels_between_taxa": 4,
@@ -122,7 +122,7 @@ def test_levels_between_distant_taxa():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == {
+    assert json.loads(result.stdout.decode("utf-8")) == {
         "left_levels_to_common_parent": 26,
         "right_levels_to_common_parent": 8,
         "total_levels_between_taxa": 34,
@@ -138,7 +138,7 @@ def test_is_virus_fail():
         capture_output=True,
     )
 
-    assert not json.loads(result.out.decode("utf-8"))
+    assert not json.loads(result.stdout.decode("utf-8"))
 
 
 def test_is_eukaryote_pass():
@@ -149,7 +149,7 @@ def test_is_eukaryote_pass():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8"))
+    assert json.loads(result.stdout.decode("utf-8"))
 
 
 def test_is_archaea_fail():
@@ -161,7 +161,7 @@ def test_is_archaea_fail():
         capture_output=True,
     )
 
-    assert not json.loads(result.out.decode("utf-8"))
+    assert not json.loads(result.stdout.decode("utf-8"))
 
 
 def test_is_archaea_pass():
@@ -173,7 +173,7 @@ def test_is_archaea_pass():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8"))
+    assert json.loads(result.stdout.decode("utf-8"))
 
 
 def test_current_taxid():
@@ -184,7 +184,7 @@ def test_current_taxid():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == {
+    assert json.loads(result.stdout.decode("utf-8")) == {
         "isCurrent": True,
         "isDeleted": False,
         "isMerged": False,
@@ -199,7 +199,7 @@ def test_deleted_taxid():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == {
+    assert json.loads(result.stdout.decode("utf-8")) == {
         "isCurrent": False,
         "isDeleted": True,
         "isMerged": False,
@@ -215,7 +215,7 @@ def test_merged_taxid():
         capture_output=True,
     )
 
-    assert json.loads(result.out.decode("utf-8")) == {
+    assert json.loads(result.stdout.decode("utf-8")) == {
         "isCurrent": False,
         "isDeleted": False,
         "isMerged": photobacteriumProfundumNew,
