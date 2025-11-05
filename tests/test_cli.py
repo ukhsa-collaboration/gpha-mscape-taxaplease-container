@@ -1,8 +1,19 @@
 import json
 import subprocess
+import pytest
 
 
-def test_root_returns_itself_as_parent():
+@pytest.fixture(scope="module")
+def instantiate_db():
+    result = subprocess.run(
+        ["taxaplease", "taxid", "--parent", "1"],
+        capture_output=True,
+    )
+
+    assert result.sterr is None
+
+
+def test_root_returns_itself_as_parent(instantiate_db):
     result = subprocess.run(
         ["taxaplease", "taxid", "--parent", "1"],
         capture_output=True,
@@ -11,7 +22,7 @@ def test_root_returns_itself_as_parent():
     assert result.stdout.strip() == b"1"
 
 
-def test_root_record_as_expected():
+def test_root_record_as_expected(instantiate_db):
     result = subprocess.run(
         ["taxaplease", "record", "--record", "1"],
         capture_output=True,
@@ -25,7 +36,7 @@ def test_root_record_as_expected():
     }
 
 
-def test_taxid_2000_is_streptosporangium():
+def test_taxid_2000_is_streptosporangium(instantiate_db):
     result = subprocess.run(
         ["taxaplease", "record", "--record", "2000"],
         capture_output=True,
@@ -34,7 +45,7 @@ def test_taxid_2000_is_streptosporangium():
     assert json.loads(result.stdout.decode("utf-8")).get("name") == "Streptosporangium"
 
 
-def test_parent_taxa():
+def test_parent_taxa(instantiate_db):
     result = subprocess.run(
         ["taxaplease", "taxid", "--parent", "2004"],
         capture_output=True,
@@ -43,7 +54,7 @@ def test_parent_taxa():
     assert json.loads(result.stdout.decode("utf-8")) == 85012
 
 
-def test_get_genus_taxid():
+def test_get_genus_taxid(instantiate_db):
     result = subprocess.run(
         ["taxaplease", "taxid", "--genus", "562"],
         capture_output=True,
@@ -52,7 +63,7 @@ def test_get_genus_taxid():
     assert json.loads(result.stdout.decode("utf-8")) == 561
 
 
-def test_common_parent_record_distant_taxa():
+def test_common_parent_record_distant_taxa(instantiate_db):
     taxid_canis_lupus = 9612
     taxid_aloe_vera = 34199
 
@@ -70,7 +81,7 @@ def test_common_parent_record_distant_taxa():
     assert json.loads(result.stdout.decode("utf-8")).get("name") == "Eukaryota"
 
 
-def test_common_parent_record_close_taxa():
+def test_common_parent_record_close_taxa(instantiate_db):
     ## E. coli and a random Shigella are both Enterobacteriaceae
     taxid_e_coli = 562
     taxid_s_flexneri = 623
@@ -83,7 +94,7 @@ def test_common_parent_record_close_taxa():
     assert json.loads(result.stdout.decode("utf-8")).get("name") == "Enterobacteriaceae"
 
 
-def test_levels_between_close_taxa():
+def test_levels_between_close_taxa(instantiate_db):
     ## levels between close taxa
     taxid_e_coli = 562
     taxid_s_flexneri = 623
@@ -106,7 +117,7 @@ def test_levels_between_close_taxa():
     }
 
 
-def test_levels_between_distant_taxa():
+def test_levels_between_distant_taxa(instantiate_db):
     ## levels between distant taxa
     taxid_e_coli = 562
     taxid_canis_lupus = 9612
@@ -129,7 +140,7 @@ def test_levels_between_distant_taxa():
     }
 
 
-def test_is_virus_fail():
+def test_is_virus_fail(instantiate_db):
     ## is aloe vera a virus? (no)
     taxid_aloe_vera = 34199
 
@@ -141,7 +152,7 @@ def test_is_virus_fail():
     assert not json.loads(result.stdout.decode("utf-8"))
 
 
-def test_is_eukaryote_pass():
+def test_is_eukaryote_pass(instantiate_db):
     taxid_aloe_vera = 34199
 
     result = subprocess.run(
@@ -152,7 +163,7 @@ def test_is_eukaryote_pass():
     assert json.loads(result.stdout.decode("utf-8"))
 
 
-def test_is_archaea_fail():
+def test_is_archaea_fail(instantiate_db):
     ## Shigella is not Archaea
     taxid_s_flexneri = 623
 
@@ -164,7 +175,7 @@ def test_is_archaea_fail():
     assert not json.loads(result.stdout.decode("utf-8"))
 
 
-def test_is_archaea_pass():
+def test_is_archaea_pass(instantiate_db):
     ## Methanobrevibacter smithii is Archaea
     taxid_random_archaea = 2173
 
@@ -176,7 +187,7 @@ def test_is_archaea_pass():
     assert json.loads(result.stdout.decode("utf-8"))
 
 
-def test_current_taxid():
+def test_current_taxid(instantiate_db):
     taxid_bacteria = 2
 
     result = subprocess.run(
@@ -191,7 +202,7 @@ def test_current_taxid():
     }
 
 
-def test_deleted_taxid():
+def test_deleted_taxid(instantiate_db):
     deletedTaxid = 3467805
 
     result = subprocess.run(
@@ -206,7 +217,7 @@ def test_deleted_taxid():
     }
 
 
-def test_merged_taxid():
+def test_merged_taxid(instantiate_db):
     photobacteriumProfundumOld = 12
     photobacteriumProfundumNew = 74109
 
