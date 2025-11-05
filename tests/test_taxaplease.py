@@ -11,6 +11,7 @@ def instantiate_db():
         ["taxaplease", "taxid", "--parent", "1"],
         capture_output=True,
     )
+    return 0
 
 
 def test_root_returns_itself_as_parent(instantiate_db):
