@@ -32,7 +32,7 @@ jobs:
         pip install pandas pyyaml climb-onyx-client
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Install code base
-      run: pip install -e .
+      run: pip install .
     - name: Install tests and linter
       run: pip install ruff pytest pytest-cov
     - name: Lint with ruff
@@ -41,11 +41,6 @@ jobs:
         ruff check --output-format=github --target-version=py312
         # Add error codes with "--ignore" if want to progress with allowed errors
         # e.g. ruff check --output-format=github --target-version=py312 --ignore PTH118,PTH123
-    - name: Test with pytest - testing file update
-      run: |  
-        mkdir -p junit
-        pytest -vv \
-              --junitxml=junit/test-results.xml \
-              --cov=taxaplease \
-              --cov-report=xml \
-              --cov-report=html
+    - name: Test with pytest
+      run: |
+        pytest --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
