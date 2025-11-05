@@ -34,7 +34,7 @@ class TaxaPlease:
             Path.mkdir(db_dir)
 
         ## if the database doesn't exist, create it
-        if not Path.isfile(db_path):
+        if not Path.is_file(db_path):
             self._create_database()
 
         return sqlite3.connect(db_path)
