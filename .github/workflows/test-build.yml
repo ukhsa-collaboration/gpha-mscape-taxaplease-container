@@ -42,5 +42,9 @@ jobs:
         # Add error codes with "--ignore" if want to progress with allowed errors
         # e.g. ruff check --output-format=github --target-version=py312 --ignore PTH118,PTH123
     - name: Test with pytest
-      run: |
-        pytest --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      run: |  
+        pytest -vv \
+              --junitxml=junit/test-results.xml \
+              --cov=taxaplease \
+              --cov-report=xml \
+              --cov-report=html
