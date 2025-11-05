@@ -41,7 +41,7 @@ jobs:
         ruff check --output-format=github --target-version=py312
         # Add error codes with "--ignore" if want to progress with allowed errors
         # e.g. ruff check --output-format=github --target-version=py312 --ignore PTH118,PTH123
-    - name: Test with pytest
+    - name: Test with pytest - testing file update
       run: |  
         mkdir -p junit
         pytest -vv \
