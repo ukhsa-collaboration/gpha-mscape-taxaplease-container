@@ -30,7 +30,7 @@ class TaxaPlease:
         db_path = Path(db_dir, "taxa.db")
 
         ## if the folder doesn't exist, create it
-        if not Path.isdir(db_dir):
+        if not Path.is_dir(db_dir):
             Path.mkdir(db_dir)
 
         ## if the database doesn't exist, create it
