@@ -6,7 +6,7 @@ import pytest  # type: ignore
 
 @pytest.fixture(scope="module")
 def instantiate_db():
-    result = subprocess.run(
+    subprocess.run(
         ["taxaplease", "taxid", "--parent", "1"],
         capture_output=True,
     )
