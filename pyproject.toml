@@ -1,5 +1,5 @@
 [project]
-name = "taxaPlease"
+name = "taxaplease"
 dynamic = ["version"]
 authors = [{ name = "Ashley Shalloe", email = "ashley.shalloe@ukhsa.gov.uk" }]
 description = "NCBI taxonomy wrangling"
