@@ -43,6 +43,7 @@ jobs:
         # e.g. ruff check --output-format=github --target-version=py312 --ignore PTH118,PTH123
     - name: Test with pytest
       run: |  
+        mkdir -p junit
         pytest -vv \
               --junitxml=junit/test-results.xml \
               --cov=taxaplease \
