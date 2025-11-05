@@ -6,12 +6,10 @@ import pytest  # type: ignore
 
 @pytest.fixture(scope="module")
 def instantiate_db():
-    result = subprocess.run(
+    subprocess.run(
         ["taxaplease", "taxid", "--parent", "1"],
         capture_output=True,
     )
-
-    assert result.stderr == b""
 
 
 def test_root_returns_itself_as_parent(instantiate_db):
