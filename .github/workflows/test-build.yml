@@ -32,7 +32,7 @@ jobs:
         pip install pandas pyyaml climb-onyx-client
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Install code base
-      run: pip install .
+      run: pip install -e .
     - name: Install tests and linter
       run: pip install ruff pytest pytest-cov
     - name: Lint with ruff
