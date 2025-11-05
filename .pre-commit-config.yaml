@@ -15,18 +15,3 @@ repos:
       name: Check for a blank line at the end of scripts (auto-fixes)
     - id: end-of-file-fixer
       name: Check for trailing whitespaces (auto-fixes)
-
-- name: Install dependencies
-  run: |
-    python -m pip install --upgrade pip
-    pip install -e .
-    pip install pytest pytest-cov
-
-- name: Run tests with coverage
-  run: |
-    mkdir -p junit
-    pytest -vv \
-      --junitxml=junit/test-results.xml \
-      --cov=taxaplease \
-      --cov-report=xml \
-      --cov-report=html
